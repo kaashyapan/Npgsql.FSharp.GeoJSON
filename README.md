@@ -1,6 +1,8 @@
 
 Add a Global Type mapper
+```
     NpgsqlConnection.GlobalTypeMapper.UseGeoJson()
+```
 
 ```
     let point = Point(Position(1.0, 2.0))
