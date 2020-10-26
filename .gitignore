@@ -1,0 +1,9 @@
+packages
+bin
+obj
+paket-files
+.vscode
+.fake
+.ionide
+.vscode
+.paket

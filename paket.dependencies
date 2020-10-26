@@ -1,0 +1,24 @@
+group Main
+    source https://api.nuget.org/v3/index.json
+    storage:none
+
+    nuget FSharp.Core
+    nuget Npgsql
+    nuget Npgsql.GeoJSON
+    nuget GeoJSON.Net
+    
+group Build
+  source https://api.nuget.org/v3/index.json
+  framework: netstandard2.0
+  storage: none
+
+  nuget Fake.Core.Target
+  nuget Fake.IO.FileSystem
+  nuget Fake.DotNet.Cli
+
+group Test
+  source https://api.nuget.org/v3/index.json
+  framework: netcoreapp3.0
+  storage:none
+
+  nuget Expecto
