@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Add GeoJSON support to Npgsql.FSharp. Wrapper around Npgsql.GeoJSON.</Description>
-    <PackageProjectUrl>https://github.com/Zaid-Ajaj/Npgsql.FSharp</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Zaid-Ajaj/Npgsql.FSharp.git</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/Zaid-Ajaj/Npgsql.FSharp/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Zaid-Ajaj/Npgsql.FSharp.GeoJSON</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Zaid-Ajaj/Npgsql.FSharp.GeoJSON.git</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/Zaid-Ajaj/Npgsql.FSharp.GeoJSON/blob/master/LICENSE</PackageLicenseUrl>
     <PackageIconUrl></PackageIconUrl>
     <PackageTags>fsharp;postgres;sql;ngpsql</PackageTags>
     <Authors>Zaid Ajaj</Authors>
