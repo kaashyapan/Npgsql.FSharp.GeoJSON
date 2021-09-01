@@ -1,3 +1,4 @@
 FSharp.Core
 Npgsql.GeoJSON
 GeoJSON.Net
+Npgsql.FSharp

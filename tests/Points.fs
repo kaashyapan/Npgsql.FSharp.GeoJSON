@@ -3,37 +3,168 @@ module Points
 open Expecto
 open Npgsql
 open Npgsql.FSharp
-open Npgsql.GeoJSON
 open Npgsql.FSharp.GeoJSON
 open GeoJSON.Net.Geometry
 
+let pointsTest connection =
+    [ test "Roundtrip point" {
+        let point = Point(Position(1.0, 2.0))
+        let id = 1
 
-let tests connection =
-    [ testList "Points tests"
-          [ test "Roundtrip point"
-                { let point = Point(Position(1.0, 2.0))
-                  connection
-                  |> Sql.parameters
-                      [ "geom", Geometry.point "geom" point
-                        "geog", Geography.point "geom" point ]
-                  |> Sql.query "INSERT INTO roundtrip (geom, geog) VALUES (@geom, @geog)"
-                  |> Sql.executeNonQuery
-                  |> ignore
+        connection
+        |> Sql.parameters [ ("id", Sql.int id)
+                            ("geom", Geometry.point point)
+                            ("geog", Geometry.point point) ]
+        |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
+        |> Sql.executeNonQuery
+        |> ignore
 
-                  connection
-                  |> Sql.parameters
-                      [ "geom", Geometry.point "geom" point
-                        "geog", Geography.point "geom" point ]
-                  |> Sql.query "SELECT * FROM roundtrip where geom = @geom AND geog = @geog"
-                  |> Sql.execute (fun read ->
-                      {| Geom = GeoReader(read.NpgsqlReader).point "geom"
-                         Geog = GeoReader(read.NpgsqlReader).point "geog" |})
-                  |> function
-                  | Error error -> raise error
-                  | Ok output ->
-                      let equalityTest =
-                          output.Head.Geom.Equals point
-                          || output.Head.Geog.Equals point
+        connection
+        |> Sql.parameters [ ("id", Sql.int id)
+                            ("geom", Geometry.point point)
+                            ("geog", Geometry.point point) ]
+        |> Sql.query "SELECT * FROM roundtrip where id = @id and geom = @geom and geog = @geog"
+        |> Sql.execute
+            (fun (read) ->
+                let geoReader = GeoReader(read.NpgsqlReader)
 
-                      Expect.isTrue equalityTest "Point column roundtrip is not Ok"
-            } ] ]
+                {| Geom = geoReader.geoPoint "geom"
+                   Geog = geoReader.geoPoint "geog" |})
+        |> function
+            | output ->
+
+                let equalityTest =
+                    output.Head.Geom.Equals point
+                    || output.Head.Geog.Equals point
+
+                Expect.isTrue equalityTest "Point column roundtrip optional is not Ok"
+
+      }
+      test "Roundtrip point optional" {
+          let point = Point(Position(1.0, 2.0)) |> Some
+          let id = 2
+
+          connection
+          |> Sql.parameters [ ("id", Sql.int id)
+                              ("geom", Geometry.pointOrNone point)
+                              ("geog", Geometry.pointOrNone point) ]
+          |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
+          |> Sql.executeNonQuery
+          |> ignore
+
+          connection
+          |> Sql.parameters [ ("id", Sql.int id)
+                              ("geom", Geometry.pointOrNone point)
+                              ("geog", Geometry.pointOrNone point) ]
+          |> Sql.query "SELECT * FROM roundtrip where id = @id"
+          |> Sql.execute
+              (fun read ->
+                  let geoReader = GeoReader(read.NpgsqlReader)
+
+                  {| Id = read.int "id"
+                     Geom = geoReader.geoPointOrNone "geom"
+                     Geog = geoReader.geoPointOrNone "geog" |})
+          |> function
+              | output ->
+                  let equalityTest =
+                      (output.Head.Geom = point)
+                      || (output.Head.Geog = point)
+
+                  Expect.isTrue equalityTest "Point column roundtrip optional is not Ok"
+      }
+      test "Roundtrip point optional Null" {
+          let point = None
+          let id = 3
+
+          connection
+          |> Sql.parameters [ ("id", Sql.int id)
+                              ("geom", Geometry.pointOrNone point)
+                              ("geog", Geometry.pointOrNone point) ]
+          |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
+          |> Sql.executeNonQuery
+          |> ignore
+
+          connection
+          |> Sql.parameters [ ("id", Sql.int id)
+                              ("geom", Geometry.pointOrNone point)
+                              ("geog", Geometry.pointOrNone point) ]
+          |> Sql.query "SELECT * FROM roundtrip where id = @id"
+          |> Sql.execute
+              (fun read ->
+                  let geoReader = GeoReader(read.NpgsqlReader)
+
+                  {| Id = read.int "id"
+                     Geom = geoReader.geoPointOrNone "geom"
+                     Geog = geoReader.geoPointOrNone "geog" |})
+          |> function
+              | output ->
+                  let equalityTest =
+                      (output.Head.Geom = point)
+                      || (output.Head.Geog = point)
+
+                  Expect.isTrue equalityTest "Point column roundtrip optional is not Ok"
+      }
+      test "Roundtrip point value optional" {
+          let point = Point(Position(1.0, 2.0)) |> ValueSome
+          let id = 4
+
+          connection
+          |> Sql.parameters [ ("id", Sql.int id)
+                              ("geom", Geometry.pointOrValueNone point)
+                              ("geog", Geometry.pointOrValueNone point) ]
+          |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
+          |> Sql.executeNonQuery
+          |> ignore
+
+          connection
+          |> Sql.parameters [ ("id", Sql.int id)
+                              ("geom", Geometry.pointOrValueNone point)
+                              ("geog", Geometry.pointOrValueNone point) ]
+          |> Sql.query "SELECT * FROM roundtrip where id = @id"
+          |> Sql.execute
+              (fun read ->
+                  let geoReader = GeoReader(read.NpgsqlReader)
+
+                  {| Id = read.int "id"
+                     Geom = geoReader.geoPointOrValueNone "geom"
+                     Geog = geoReader.geoPointOrValueNone "geog" |})
+          |> function
+              | output ->
+                  let equalityTest =
+                      (output.Head.Geom = point)
+                      || (output.Head.Geog = point)
+
+                  Expect.isTrue equalityTest "Point column roundtrip value optional is not Ok"
+      }
+      test "Roundtrip point value optional Null" {
+          let point = ValueNone
+          let id = 5
+
+          connection
+          |> Sql.parameters [ ("id", Sql.int id)
+                              ("geom", Geometry.pointOrValueNone point)
+                              ("geog", Geometry.pointOrValueNone point) ]
+          |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
+          |> Sql.executeNonQuery
+          |> ignore
+
+          connection
+          |> Sql.parameters [ ("id", Sql.int id)
+                              ("geom", Geometry.pointOrValueNone point)
+                              ("geog", Geometry.pointOrValueNone point) ]
+          |> Sql.query "SELECT * FROM roundtrip where id = @id"
+          |> Sql.execute
+              (fun read ->
+                  let geoReader = GeoReader(read.NpgsqlReader)
+
+                  {| Id = read.int "id"
+                     Geom = geoReader.geoPointOrValueNone "geom"
+                     Geog = geoReader.geoPointOrValueNone "geog" |})
+          |> function
+              | output ->
+                  let equalityTest =
+                      (output.Head.Geom = point)
+                      || (output.Head.Geog = point)
+
+                  Expect.isTrue equalityTest "Point column roundtrip value optional is not Ok"
+      } ]
