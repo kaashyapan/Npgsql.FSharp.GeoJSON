@@ -20,3 +20,9 @@ group Test
   storage:none
 
   nuget Expecto
+
+group Github
+  git https://github.com/kaashyapan/Npgsql.FSharp.GeoJSON.git path: src/ build: "build.cmd", OS: windows
+  git https://github.com/kaashyapan/Npgsql.FSharp.GeoJSON.git path: src/ build: "build.sh", OS: mono
+  source https://api.nuget.org/v3/index.json
+  storage:packages
