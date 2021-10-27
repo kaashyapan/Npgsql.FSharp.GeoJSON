@@ -58,12 +58,10 @@ let badSqlsTest connection =
                                       ("geog", Geometry.pointOrValueNone point) ]
                   |> Sql.query "SELECT * FROM roundtrip where id = @id"
                   |> Sql.execute
-                      (fun read ->
-                          let geoReader = GeoReader(read.NpgsqlReader)
-
-                          {| Id = read.int "id"
-                             Geom = geoReader.geoPointOrValueNone "geom1"
-                             Geog = geoReader.geoPointOrValueNone "geog" |})
+                      (fun reader ->
+                          {| Id = reader.int "id"
+                             Geom = reader.geoPointOrValueNone "geom1"
+                             Geog = reader.geoPointOrValueNone "geog" |})
                   |> ignore)
               "Check invalid column fails with expected exception type"
 
@@ -86,12 +84,10 @@ let badSqlsTest connection =
                   |> Sql.parameters [ ("id", Sql.int id) ]
                   |> Sql.query "SELECT * FROM roundtrip where id = @id"
                   |> Sql.execute
-                      (fun read ->
-                          let geoReader = GeoReader(read.NpgsqlReader)
-
-                          {| Id = read.int "id"
-                             Geom = read.intOrNone "geom"
-                             Geog = geoReader.geoPointOrValueNone "geog" |})
+                      (fun reader ->
+                          {| Id = reader.int "id"
+                             Geom = reader.intOrNone "geom"
+                             Geog = reader.geoPointOrValueNone "geog" |})
                   |> ignore)
               "Check invalid column fails with expected exception type"
       } ]

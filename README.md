@@ -1,11 +1,11 @@
-##Usage
+## Usage
 
-###Add a Global Type mapper
+### Add a Global Type mapper once
 ```
     NpgsqlConnection.GlobalTypeMapper.UseGeoJson()
 ```
 
-###Insert
+### Insert
 ```
     let point = Point(Position(1.0, 2.0))
     connection
@@ -17,18 +17,21 @@
     |> ignore
 ```
 
-###Read
+### Read
 ```
     connection
     |> Sql.parameters [ ("id", Sql.int id) ]
     |> Sql.query "SELECT * FROM roundtrip where id = @id"
     |> Sql.execute
-        (fun (read) ->
-            // construct a reader for geo types
-            let geoReader = GeoReader(read.NpgsqlReader)
-
+        (fun (reader) ->
             // point & polygon are read as geoPoint & geoPolygon 
             // to avoid clash with native postgres types
-            {| Geom = geoReader.geoPoint "geom"
-               Geog = geoReader.geoPoint "geog" |})
+            {| Geom = reader.geoPoint "geom"
+               Geog = reader.geoPoint "geog" |})
+```
+
+### Commands
+```
+Tests - dotnet run -p tests
+Nupkg - build.sh
 ```

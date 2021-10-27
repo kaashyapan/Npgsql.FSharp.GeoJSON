@@ -14,7 +14,7 @@ let pointsTest connection =
         connection
         |> Sql.parameters [ ("id", Sql.int id)
                             ("geom", Geometry.point point)
-                            ("geog", Geometry.point point) ]
+                            ("geog", Geography.point point) ]
         |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
         |> Sql.executeNonQuery
         |> ignore
@@ -22,14 +22,12 @@ let pointsTest connection =
         connection
         |> Sql.parameters [ ("id", Sql.int id)
                             ("geom", Geometry.point point)
-                            ("geog", Geometry.point point) ]
+                            ("geog", Geography.point point) ]
         |> Sql.query "SELECT * FROM roundtrip where id = @id and geom = @geom and geog = @geog"
         |> Sql.execute
-            (fun (read) ->
-                let geoReader = GeoReader(read.NpgsqlReader)
-
-                {| Geom = geoReader.geoPoint "geom"
-                   Geog = geoReader.geoPoint "geog" |})
+            (fun (reader) ->
+                {| Geom = reader.geoPoint "geom"
+                   Geog = reader.geoPoint "geog" |})
         |> function
             | output ->
 
@@ -47,7 +45,7 @@ let pointsTest connection =
           connection
           |> Sql.parameters [ ("id", Sql.int id)
                               ("geom", Geometry.pointOrNone point)
-                              ("geog", Geometry.pointOrNone point) ]
+                              ("geog", Geography.pointOrNone point) ]
           |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
           |> Sql.executeNonQuery
           |> ignore
@@ -55,15 +53,13 @@ let pointsTest connection =
           connection
           |> Sql.parameters [ ("id", Sql.int id)
                               ("geom", Geometry.pointOrNone point)
-                              ("geog", Geometry.pointOrNone point) ]
+                              ("geog", Geography.pointOrNone point) ]
           |> Sql.query "SELECT * FROM roundtrip where id = @id"
           |> Sql.execute
-              (fun read ->
-                  let geoReader = GeoReader(read.NpgsqlReader)
-
-                  {| Id = read.int "id"
-                     Geom = geoReader.geoPointOrNone "geom"
-                     Geog = geoReader.geoPointOrNone "geog" |})
+              (fun reader ->
+                  {| Id = reader.int "id"
+                     Geom = reader.geoPointOrNone "geom"
+                     Geog = reader.geoPointOrNone "geog" |})
           |> function
               | output ->
                   let equalityTest =
@@ -79,7 +75,7 @@ let pointsTest connection =
           connection
           |> Sql.parameters [ ("id", Sql.int id)
                               ("geom", Geometry.pointOrNone point)
-                              ("geog", Geometry.pointOrNone point) ]
+                              ("geog", Geography.pointOrNone point) ]
           |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
           |> Sql.executeNonQuery
           |> ignore
@@ -87,15 +83,13 @@ let pointsTest connection =
           connection
           |> Sql.parameters [ ("id", Sql.int id)
                               ("geom", Geometry.pointOrNone point)
-                              ("geog", Geometry.pointOrNone point) ]
+                              ("geog", Geography.pointOrNone point) ]
           |> Sql.query "SELECT * FROM roundtrip where id = @id"
           |> Sql.execute
-              (fun read ->
-                  let geoReader = GeoReader(read.NpgsqlReader)
-
-                  {| Id = read.int "id"
-                     Geom = geoReader.geoPointOrNone "geom"
-                     Geog = geoReader.geoPointOrNone "geog" |})
+              (fun reader ->
+                  {| Id = reader.int "id"
+                     Geom = reader.geoPointOrNone "geom"
+                     Geog = reader.geoPointOrNone "geog" |})
           |> function
               | output ->
                   let equalityTest =
@@ -111,7 +105,7 @@ let pointsTest connection =
           connection
           |> Sql.parameters [ ("id", Sql.int id)
                               ("geom", Geometry.pointOrValueNone point)
-                              ("geog", Geometry.pointOrValueNone point) ]
+                              ("geog", Geography.pointOrValueNone point) ]
           |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
           |> Sql.executeNonQuery
           |> ignore
@@ -119,15 +113,13 @@ let pointsTest connection =
           connection
           |> Sql.parameters [ ("id", Sql.int id)
                               ("geom", Geometry.pointOrValueNone point)
-                              ("geog", Geometry.pointOrValueNone point) ]
+                              ("geog", Geography.pointOrValueNone point) ]
           |> Sql.query "SELECT * FROM roundtrip where id = @id"
           |> Sql.execute
-              (fun read ->
-                  let geoReader = GeoReader(read.NpgsqlReader)
-
-                  {| Id = read.int "id"
-                     Geom = geoReader.geoPointOrValueNone "geom"
-                     Geog = geoReader.geoPointOrValueNone "geog" |})
+              (fun reader ->
+                  {| Id = reader.int "id"
+                     Geom = reader.geoPointOrValueNone "geom"
+                     Geog = reader.geoPointOrValueNone "geog" |})
           |> function
               | output ->
                   let equalityTest =
@@ -143,7 +135,7 @@ let pointsTest connection =
           connection
           |> Sql.parameters [ ("id", Sql.int id)
                               ("geom", Geometry.pointOrValueNone point)
-                              ("geog", Geometry.pointOrValueNone point) ]
+                              ("geog", Geography.pointOrValueNone point) ]
           |> Sql.query "INSERT INTO roundtrip (id, geom, geog) VALUES (@id, @geom, @geog)"
           |> Sql.executeNonQuery
           |> ignore
@@ -151,15 +143,13 @@ let pointsTest connection =
           connection
           |> Sql.parameters [ ("id", Sql.int id)
                               ("geom", Geometry.pointOrValueNone point)
-                              ("geog", Geometry.pointOrValueNone point) ]
+                              ("geog", Geography.pointOrValueNone point) ]
           |> Sql.query "SELECT * FROM roundtrip where id = @id"
           |> Sql.execute
-              (fun read ->
-                  let geoReader = GeoReader(read.NpgsqlReader)
-
-                  {| Id = read.int "id"
-                     Geom = geoReader.geoPointOrValueNone "geom"
-                     Geog = geoReader.geoPointOrValueNone "geog" |})
+              (fun reader ->
+                  {| Id = reader.int "id"
+                     Geom = reader.geoPointOrValueNone "geom"
+                     Geog = reader.geoPointOrValueNone "geog" |})
           |> function
               | output ->
                   let equalityTest =

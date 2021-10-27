@@ -4,9 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  <!--ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="../src/Npgsql.FSharp.GeoJSON.fsproj" />
-  </ItemGroup-->
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Points.fs" />
     <Compile Include="BadSqls.fs" />

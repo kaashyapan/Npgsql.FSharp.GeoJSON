@@ -5,8 +5,6 @@ set -eu
 cd "$(dirname "$0")"
 
 PAKET_EXE=.paket/paket.exe
-FAKE_EXE=packages/build/FAKE/tools/FAKE.exe
-
 
 run() {
     "$@"
@@ -23,5 +21,4 @@ else
    run paket install
 fi
 
-
-run dotnet run fake -v run build.fsx
+run dotnet pack -c Release src

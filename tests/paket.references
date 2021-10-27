@@ -5,6 +5,3 @@ group Main
 group Test
     Expecto
     FSharp.Core
-
-group Github
-    Npgsql.FSharp.GeoJSON

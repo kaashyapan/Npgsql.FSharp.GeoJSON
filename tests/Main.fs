@@ -8,17 +8,6 @@ open Npgsql.FSharp
 
 let buildDatabaseConnection =
 
-    // Travis CI uses an empty string for the password of the database
-    let databasePassword =
-        let runningTravis =
-            Environment.GetEnvironmentVariable "TESTING_IN_TRAVISCI"
-
-        if isNull runningTravis
-           || String.IsNullOrWhiteSpace runningTravis then
-            "postgres" // for local tests
-        else
-            "" // for Travis CI
-
     let connection =
         Sql.host "xx.xx.xxx.xxx"
         |> Sql.port 5432

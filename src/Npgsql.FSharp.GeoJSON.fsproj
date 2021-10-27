@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>Npgsql.FSharp.GeoJSON</PackageId>
-    <Authors>Sundar Narayanaswamy</Authors>
+    <Authors>@kaashyapan</Authors>
     <Version>0.1.0</Version>
     <AssemblyName>Npgsql.FSharp.GeoJSON</AssemblyName>
     <Description>Add GeoJSON support to Npgsql.FSharp. Wrapper around Npgsql.GeoJSON.</Description>
@@ -16,8 +16,7 @@
     <PackageReleaseNotes>Initial version</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Parameters.fs" />
-    <Compile Include="Readers.fs" />
+    <Compile Include="GeoExtensions.fs" />
   </ItemGroup>
   
   <Import Project="..\.paket\Paket.Restore.targets" />

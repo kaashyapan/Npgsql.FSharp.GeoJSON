@@ -119,3 +119,79 @@ type Geography =
 
     static member geoJsonObjectOrValueNone(value: GeoJSONObject voption) =
         Utils.sqlValueMap value Utils.makeGeography
+
+[<AutoOpen>]
+module GeoReader = 
+    type RowReader with 
+        member this.geoPoint(column: string) : Point =
+            this.fieldValue<Point>(column)
+
+        member this.geoPointOrNone(column: string) : Point option =
+            this.fieldValueOrNone<Point>(column)            
+
+        member this.geoPointOrValueNone(column: string) : Point voption =
+            this.fieldValueOrValueNone<Point>(column)
+
+        member this.lineString(column: string) : LineString =
+            this.fieldValue<LineString>(column)
+            
+        member this.lineStringOrNone(column: string) : LineString option =
+            this.fieldValueOrNone<LineString>(column)            
+            
+        member this.lineStringOrValueNone(column: string) : LineString voption =
+            this.fieldValueOrValueNone<LineString>(column)            
+
+        member this.geoPolygon(column: string) : Polygon =
+            this.fieldValue<Polygon>(column)
+            
+        member this.geoPolygonOrNone(column: string) : Polygon option =
+            this.fieldValueOrNone<Polygon>(column)            
+
+        member this.geoPolygonOrValueNone(column: string) : Polygon voption =
+            this.fieldValueOrValueNone<Polygon>(column)            
+            
+        member this.multiPoint(column: string) : MultiPoint =
+            this.fieldValue<MultiPoint>(column)
+            
+        member this.multiPointOrNone(column: string) : MultiPoint option =
+            this.fieldValueOrNone<MultiPoint>(column)            
+            
+        member this.multiPointOrValueNone(column: string) : MultiPoint voption =
+            this.fieldValueOrValueNone<MultiPoint>(column)            
+            
+        member this.multiLineString(column: string) : MultiLineString =
+            this.fieldValue<MultiLineString>(column)
+            
+        member this.multiLineStringOrNone(column: string) : MultiLineString option =
+            this.fieldValueOrNone<MultiLineString>(column)            
+            
+        member this.multiLineStringOrValueNone(column: string) : MultiLineString voption =
+            this.fieldValueOrValueNone<MultiLineString>(column)            
+            
+        member this.multiPolygon(column: string) : MultiPolygon =
+            this.fieldValue<MultiPolygon>(column)
+            
+        member this.multiPolygonOrNone(column: string) : MultiPolygon option =
+            this.fieldValueOrNone<MultiPolygon>(column)            
+            
+        member this.multiPolygonOrValueNone(column: string) : MultiPolygon voption =
+            this.fieldValueOrValueNone<MultiPolygon>(column)            
+            
+        member this.geometryCollection(column: string) : GeometryCollection =
+            this.fieldValue<GeometryCollection>(column)
+            
+        member this.geometryCollectionOrNone(column: string) : GeometryCollection option =
+            this.fieldValueOrNone<GeometryCollection>(column)            
+            
+        member this.geometryCollectionOrValueNone(column: string) : GeometryCollection voption =
+            this.fieldValueOrValueNone<GeometryCollection>(column)            
+            
+        member this.geoJSONObject(column: string) : GeoJSONObject =
+            this.fieldValue<GeoJSONObject>(column)
+            
+        member this.geoJSONObjectOrNone(column: string) : GeoJSONObject option =
+            this.fieldValueOrNone<GeoJSONObject>(column)            
+            
+        member this.geoJSONObjectOrValueNone(column: string) : GeoJSONObject voption =
+            this.fieldValueOrValueNone<GeoJSONObject>(column)            
+            
